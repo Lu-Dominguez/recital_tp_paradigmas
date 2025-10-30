@@ -1,12 +1,17 @@
 package recital;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Cancion {
 	private String titulo;
 	private double duracion;
 	private HashMap<Rol, Integer> rolesRequeridos = new HashMap<Rol, Integer>();
+	private ArrayList<Asignacion> asignaciones = new ArrayList<>();
 	
+	public ArrayList<Asignacion> getAsignaciones() {
+		return asignaciones;
+	}
 	public Rol rolesFaltantes() {
 		return null;
 	}
@@ -31,7 +36,4 @@ public class Cancion {
 	public HashMap<Rol, Integer> getRolesRequeridos() {
 		return rolesRequeridos;
 	}
-	
-	
-
 }
