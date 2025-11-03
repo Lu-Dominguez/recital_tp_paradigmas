@@ -9,6 +9,11 @@ public class Cancion {
 	private HashMap<Rol, Integer> rolesRequeridos = new HashMap<Rol, Integer>();
 	private ArrayList<Asignacion> asignaciones = new ArrayList<>();
 	
+	public Cancion(String titulo, double duracion) {
+		this.titulo = titulo;
+		this.duracion = duracion;
+	}
+	
 	public ArrayList<Asignacion> getAsignaciones() {
 		return asignaciones;
 	}
@@ -21,6 +26,17 @@ public class Cancion {
 	public double calcularCosto() {
 		return 0.0;
 	}
+	public void agregarAsignacion(Asignacion a) {
+		asignaciones.add(a);
+	}
+	public void agregarRolRequerido(Rol rol, int cantidad) {
+	    if(rol == null || cantidad <= 0) {
+	        throw new IllegalArgumentException("Rol inválido o cantidad inválida");
+	    }
+	    //si ya existe el rol, sumamos la cantidad
+	    rolesRequeridos.put(rol, rolesRequeridos.getOrDefault(rol, 0) + cantidad);
+	}
+
 	public String getTitulo() {
 		return titulo;
 	}
