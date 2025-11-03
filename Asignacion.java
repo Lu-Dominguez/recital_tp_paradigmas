@@ -19,7 +19,7 @@ public class Asignacion {
 	    this.artista = ar;
 	    this.cancion = can;
 	    this.rol = rol;
-	    can.getAsignaciones().add(this);
+	    can.agregarAsignacion(this);
 	}
 	
 	public ArtistaBase getArtista() {
@@ -40,5 +40,6 @@ public class Asignacion {
 		return descuentos;
 	}
 }
+
 
 
