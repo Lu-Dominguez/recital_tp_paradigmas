@@ -27,6 +27,16 @@ public class ArtistaCandidato extends ArtistaBase{
 		}
 		return costoIni;
 	}
+	@Override
+	public void validarAsignacion(Cancion cancion, Rol rol) throws Exception {
+	    if(!puedeTocar()) {
+	        throw new Exception("El artista ha alcanzado el máximo de canciones dispuesto a tocar.");
+	    }
+
+	    if(!getRolesHistoricos().contains(rol) && !getRolesEntrenados().contains(rol)) {
+	        throw new Exception("El artista nunca ha ocupado ese rol. Debe entrenarse.");
+	    }
+	}
 	public boolean compartioBandaConArtistaBase() {
 		return false;
 	}
@@ -52,3 +62,4 @@ public class ArtistaCandidato extends ArtistaBase{
 	}
 	
 }
+
