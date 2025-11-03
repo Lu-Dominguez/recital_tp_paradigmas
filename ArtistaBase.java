@@ -15,7 +15,12 @@ public class ArtistaBase {
 		this.bandasHistoricas = bandasHistoricas;
 		this.rolesHistoricos = rolesHistoricos;
 	}
-	
+	public void validarAsignacion(Cancion cancion, Rol rol) throws Exception {
+	    //un artista base puede tocar cualquier rol que haya hecho históricamente
+	    if (!getRolesHistoricos().contains(rol)) {
+	        throw new Exception("El artista base no ha ocupado el rol " + rol.getNombreRol());
+	    }
+	}
 	public void agregarRol(Rol nuevoRol) {
 		rolesHistoricos.add(nuevoRol);
 	}
@@ -33,3 +38,4 @@ public class ArtistaBase {
 		bandasHistoricas.add(bandaNueva);
 	}
 }
+
