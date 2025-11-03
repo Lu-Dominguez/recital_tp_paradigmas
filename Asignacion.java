@@ -8,8 +8,8 @@ public class Asignacion {
 	private Cancion cancion;
 	
 	public Asignacion(ArtistaBase ar, Cancion can, Rol rol) throws Exception {
-	    for (Asignacion a: can.getAsignaciones()) {
-	        if (a.getArtista().equals(ar) && a.getCancion().equals(can)) {
+	    for(Asignacion a: can.getAsignaciones()) {
+	        if(a.getArtista().equals(ar) && a.getCancion().equals(can)) {
 	            throw new Exception("El artista ya tiene asignado un rol para la canción " + can.getTitulo());
 	        }
 	    }
@@ -40,4 +40,5 @@ public class Asignacion {
 		return descuentos;
 	}
 }
+
 
