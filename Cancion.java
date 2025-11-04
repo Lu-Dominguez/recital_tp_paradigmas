@@ -18,10 +18,24 @@ public class Cancion {
 		return asignaciones;
 	}
 	public Rol rolesFaltantes() {
-		return null;
+	    for(Rol rol : rolesRequeridos.keySet()) {
+	        int cantidadRequerida = rolesRequeridos.get(rol);
+	        int cantidadAsignada = 0;
+	        //cuento cuantos artistas ya tienen este rol
+	        for(Asignacion a : asignaciones) {
+	            if(a.getRol().equals(rol)) {
+	                cantidadAsignada++;
+	            }
+	        }
+	        if(cantidadAsignada < cantidadRequerida) {
+	            return rol;
+	        }
+	    }
+	    return null;
 	}
+	
 	public boolean estaCompleta() {
-		return false;
+		return rolesFaltantes()==null;
 	}
 	public double calcularCosto() {
 		return 0.0;
