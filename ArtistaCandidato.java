@@ -17,14 +17,10 @@ public class ArtistaCandidato extends ArtistaBase{
 	
 	public double calcularCostoContratacion(ArrayList<ArtistaBase> artistasBase) {
 		double costoIni = costoBasePorCancion;
+		
 		//si ya toco con un ArtistaBase en una banda, su costo se reduce al 50%
-		for(ArtistaBase base : artistasBase) {
-			for(Banda b : this.getBandasHistoricas()) {
-				if(base.getBandasHistoricas().contains(b)) {
-					return costoIni / 2;
-				}
-			}
-		}
+		if(compartioBandaConArtistaBase(artistasBase))
+			return costoIni / 2;
 		return costoIni;
 	}
 	@Override
@@ -37,11 +33,27 @@ public class ArtistaCandidato extends ArtistaBase{
 	        throw new Exception("El artista nunca ha ocupado ese rol. Debe entrenarse.");
 	    }
 	}
-	public boolean compartioBandaConArtistaBase() {
+
+	public boolean compartioBandaConArtistaBase(ArrayList<ArtistaBase> artistasBase) {
+		for(ArtistaBase a : artistasBase) {
+			for(Banda b: this.getBandasHistoricas()) {
+				if(a.getBandasHistoricas().contains(b))
+					return true;
+			}
+		}
 		return false;
 	}
+	
+	public void entrenarRol(Rol rol) {
+		//falta verificar q el artista no este ya contratado para alguna canción
+		rolesEntrenados.add(rol);
+	}
 	public double calcularCostoExtraEntrenado() {
-		return 0.0;
+		int cantidad = rolesEntrenados.size();
+		if(cantidad > 0) {
+			return costoBasePorCancion * (1+ cantidad * 0.5);
+		}
+		return costoBasePorCancion;
 	}
 	
 	public boolean puedeTocar() {
@@ -62,4 +74,3 @@ public class ArtistaCandidato extends ArtistaBase{
 	}
 	
 }
-
