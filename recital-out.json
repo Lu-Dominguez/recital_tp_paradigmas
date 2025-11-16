@@ -1,0 +1,171 @@
+{
+  "artistas": [
+    {
+      "nombre": "Brian May",
+      "roles": [
+        "guitarra eléctrica",
+        "voz secundaria"
+      ],
+      "bandas": [
+        "Queen"
+      ],
+      "costo": 0.0,
+      "maxCanciones": 0,
+      "rolesEntrenados": [],
+      "tipo": "base"
+    },
+    {
+      "nombre": "Roger Taylor",
+      "roles": [
+        "batería",
+        "voz secundaria"
+      ],
+      "bandas": [
+        "Queen"
+      ],
+      "costo": 0.0,
+      "maxCanciones": 0,
+      "rolesEntrenados": [],
+      "tipo": "base"
+    },
+    {
+      "nombre": "John Deacon",
+      "roles": [
+        "bajo"
+      ],
+      "bandas": [
+        "Queen"
+      ],
+      "costo": 0.0,
+      "maxCanciones": 0,
+      "rolesEntrenados": [],
+      "tipo": "base"
+    },
+    {
+      "nombre": "George Michael",
+      "roles": [
+        "voz principal"
+      ],
+      "bandas": [
+        "Wham!",
+        "George Michael"
+      ],
+      "costo": 1000.0,
+      "maxCanciones": 3,
+      "rolesEntrenados": [],
+      "tipo": "candidato"
+    },
+    {
+      "nombre": "Elton John",
+      "roles": [
+        "voz principal",
+        "piano"
+      ],
+      "bandas": [
+        "Elton John Band"
+      ],
+      "costo": 1200.0,
+      "maxCanciones": 2,
+      "rolesEntrenados": [],
+      "tipo": "candidato"
+    },
+    {
+      "nombre": "David Bowie",
+      "roles": [
+        "voz principal"
+      ],
+      "bandas": [
+        "Tin Machine",
+        "David Bowie"
+      ],
+      "costo": 1500.0,
+      "maxCanciones": 2,
+      "rolesEntrenados": [],
+      "tipo": "candidato"
+    },
+    {
+      "nombre": "Annie Lennox",
+      "roles": [
+        "voz principal"
+      ],
+      "bandas": [
+        "Eurythmics"
+      ],
+      "costo": 900.0,
+      "maxCanciones": 2,
+      "rolesEntrenados": [],
+      "tipo": "candidato"
+    },
+    {
+      "nombre": "Lisa Stansfield",
+      "roles": [
+        "voz principal"
+      ],
+      "bandas": [
+        "Lisa Stansfield"
+      ],
+      "costo": 800.0,
+      "maxCanciones": 2,
+      "rolesEntrenados": [],
+      "tipo": "candidato"
+    }
+  ],
+  "canciones": [
+    {
+      "titulo": "Somebody to Love",
+      "duracion": 0.0,
+      "rolesRequeridos": {
+        "piano": 1,
+        "voz principal": 1,
+        "bajo": 1,
+        "guitarra eléctrica": 1,
+        "batería": 1
+      },
+      "asignaciones": []
+    },
+    {
+      "titulo": "We Will Rock You",
+      "duracion": 0.0,
+      "rolesRequeridos": {
+        "voz principal": 1,
+        "bajo": 1,
+        "guitarra eléctrica": 1,
+        "batería": 1
+      },
+      "asignaciones": [
+        {
+          "artista": "Lisa Stansfield",
+          "rol": "voz principal",
+          "costo": 800.0,
+          "descuentos": 0.0,
+          "tipo": "candidato"
+        }
+      ]
+    },
+    {
+      "titulo": "These Are the Days of Our Lives",
+      "duracion": 0.0,
+      "rolesRequeridos": {
+        "voz principal": 1,
+        "bajo": 1,
+        "guitarra eléctrica": 1,
+        "batería": 1
+      },
+      "asignaciones": []
+    },
+    {
+      "titulo": "Under Pressure",
+      "duracion": 0.0,
+      "rolesRequeridos": {
+        "voz principal": 2,
+        "bajo": 1,
+        "guitarra eléctrica": 1,
+        "batería": 1
+      },
+      "asignaciones": []
+    }
+  ],
+  "totales": {
+    "costoRecital": 800.0
+  }
+}

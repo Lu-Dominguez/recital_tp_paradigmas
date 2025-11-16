@@ -1,5 +1,9 @@
 package recital;
 
+/**
+ * Asignacion : es lo que representa que un artista forma parte de un rol en una cancion, ademas calcula los descuentos
+ */
+
 public class Asignacion {
     private Rol rol;
     private double costo;

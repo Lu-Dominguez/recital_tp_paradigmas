@@ -2,6 +2,11 @@ package recital;
 
 import java.util.ArrayList;
 
+
+/**
+ * Artista base : es el músico “de la casa” que no genera costo por canción y no tiene tope de canciones
+ */
+
 public class ArtistaBase {
 	private String nombre;
 	private ArrayList <Rol> rolesHistoricos = new ArrayList<Rol>();
@@ -15,13 +20,13 @@ public class ArtistaBase {
 		this.bandasHistoricas = bandasHistoricas;
 		this.rolesHistoricos = rolesHistoricos;
 	}
-	public void validarAsignacion(Cancion cancion, Rol rol) throws Exception {
+	public void validarAsignacion(recital.Cancion cancion, recital.Rol rol) throws Exception {
 	    //un artista base puede tocar cualquier rol que haya hecho históricamente
 	    if (!getRolesHistoricos().contains(rol)) {
 	        throw new Exception("El artista base no ha ocupado el rol " + rol.getNombreRol());
 	    }
 	}
-	public void agregarRol(Rol nuevoRol) {
+	public void agregarRol(recital.Rol nuevoRol) {
 		rolesHistoricos.add(nuevoRol);
 	}
 
@@ -34,7 +39,7 @@ public class ArtistaBase {
 	public ArrayList<Banda> getBandasHistoricas() {
 		return bandasHistoricas;
 	}
-	public void agregarBanda(Banda bandaNueva) {
+	public void agregarBanda(recital.Banda bandaNueva) {
 		bandasHistoricas.add(bandaNueva);
 	}
 }

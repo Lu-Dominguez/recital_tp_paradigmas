@@ -2,6 +2,12 @@ package recital;
 
 import java.util.*;
 
+
+/**
+ * Cancion: Representa una canción del recital, sus roles requeridos , y las asignaciones de artistas para cubrirlos.
+ */
+
+
 public class Cancion {
 	private String titulo;
 	private double duracion;
@@ -100,9 +106,24 @@ public class Cancion {
         }
         return total;
     }
-	public void agregarAsignacion(Asignacion a) {
-		asignaciones.add(a);
-	}
+    public void agregarAsignacion(Asignacion a) {
+        asignaciones.add(a);
+    }
+    public int removerAsignacionesDe(ArtistaBase artista) {
+        int removidas = 0;
+        java.util.Iterator<Asignacion> it = asignaciones.iterator();
+        while (it.hasNext()) {
+            Asignacion a = it.next();
+            if (a.getArtista().equals(artista)) {
+                if (artista instanceof ArtistaCandidato) {
+                    ((ArtistaCandidato) artista).anularAsignacion();
+                }
+                it.remove();
+                removidas++;
+            }
+        }
+        return removidas;
+    }
 	public void agregarRolRequerido(Rol rol, int cantidad) {
 	    if(rol == null || cantidad <= 0) {
 	        throw new IllegalArgumentException("Rol inválido o cantidad inválida");
