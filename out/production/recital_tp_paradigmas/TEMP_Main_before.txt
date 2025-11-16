@@ -1,0 +1,158 @@
+package recital;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+
+    private static final Scanner scanner = new Scanner(System.in);
+
+    private static final List<Cancion> canciones = new ArrayList<>();
+    private static final List<ArtistaBase> artistasBase = new ArrayList<>();
+    private static final List<Rol> roles = new ArrayList<>();
+
+    public static void main(String[] args) throws Exception {
+
+        cargarEscenarioDeEjemplo(); // TODO: ajustar a tus constructores
+
+        int opcion;
+        do {
+            mostrarMenu();
+            opcion = leerEntero("Opción: ");
+
+            switch (opcion) {
+                case 1 -> listarCanciones();
+                case 2 -> listarArtistasBase();
+                case 3 -> asignarArtistaACancion();
+                case 0 -> System.out.println("Saliendo...");
+                default -> System.out.println("Opción inválida");
+            }
+
+            System.out.println();
+        } while (opcion != 0);
+    }
+
+    private static void mostrarMenu() {
+        System.out.println("===== MENÚ TP RECITAL =====");
+        System.out.println("1 - Listar canciones y roles faltantes");
+        System.out.println("2 - Listar artistas base");
+        System.out.println("3 - Asignar artista a canción y rol");
+        System.out.println("0 - Salir");
+    }
+
+    // -------- OPCIÓN 1 --------
+    private static void listarCanciones() {
+        for (int i = 0; i < canciones.size(); i++) {
+            Cancion c = canciones.get(i);
+            System.out.print(i + " - " + c.getTitulo() + " ");
+
+            if (c.estaCompleta()) {
+                System.out.println("[COMPLETA]");
+            } else {
+                Rol faltante = c.rolesFaltantes();
+                System.out.println("[INCOMPLETA] Falta: " +
+                        (faltante != null ? faltante.getNombreRol() : "algún rol"));
+            }
+
+            System.out.println("   Roles requeridos:");
+            for (Map.Entry<Rol, Integer> e : c.getRolesRequeridos().entrySet()) {
+                System.out.println("      " + e.getKey().getNombreRol() + " x " + e.getValue());
+            }
+        }
+    }
+
+    // -------- OPCIÓN 2 --------
+    private static void listarArtistasBase() {
+        for (int i = 0; i < artistasBase.size(); i++) {
+            ArtistaBase a = artistasBase.get(i);
+            System.out.println(i + " - " + a.getNombre());
+            System.out.print("   Roles históricos: ");
+            a.getRolesHistoricos()
+                    .forEach(r -> System.out.print(r.getNombreRol() + " "));
+            System.out.println();
+        }
+    }
+
+    // -------- OPCIÓN 3 --------
+    private static void asignarArtistaACancion() {
+        if (canciones.isEmpty() || artistasBase.isEmpty()) {
+            System.out.println("No hay canciones o artistas cargados.");
+            return;
+        }
+
+        System.out.println("Elegí canción:");
+        for (int i = 0; i < canciones.size(); i++) {
+            System.out.println(i + " - " + canciones.get(i).getTitulo());
+        }
+        int idxCancion = leerEntero("Número de canción: ");
+        if (idxCancion < 0 || idxCancion >= canciones.size()) {
+            System.out.println("Canción inválida.");
+            return;
+        }
+        Cancion cancion = canciones.get(idxCancion);
+
+        System.out.println("Elegí artista:");
+        for (int i = 0; i < artistasBase.size(); i++) {
+            System.out.println(i + " - " + artistasBase.get(i).getNombre());
+        }
+        int idxArtista = leerEntero("Número de artista: ");
+        if (idxArtista < 0 || idxArtista >= artistasBase.size()) {
+            System.out.println("Artista inválido.");
+            return;
+        }
+        ArtistaBase artista = artistasBase.get(idxArtista);
+
+        var rolesDeLaCancion = new ArrayList<>(cancion.getRolesRequeridos().keySet());
+        System.out.println("Elegí rol:");
+        for (int i = 0; i < rolesDeLaCancion.size(); i++) {
+            System.out.println(i + " - " + rolesDeLaCancion.get(i).getNombreRol());
+        }
+        int idxRol = leerEntero("Número de rol: ");
+        if (idxRol < 0 || idxRol >= rolesDeLaCancion.size()) {
+            System.out.println("Rol inválido.");
+            return;
+        }
+        Rol rol = rolesDeLaCancion.get(idxRol);
+
+        try {
+            new Asignacion(artista, cancion, rol); // tu constructor
+            System.out.println("Asignación creada correctamente.");
+        } catch (Exception e) {
+            System.out.println("No se pudo asignar: " + e.getMessage());
+        }
+    }
+
+    // -------- ESCENARIO DE EJEMPLO --------
+    private static void cargarEscenarioDeEjemplo() {
+        // ⚠ Ajustá esto a los constructores reales de tu proyecto
+
+        Rol voz = new Rol("Voz");
+        Rol guitarra = new Rol("Guitarra");
+        roles.add(voz);
+        roles.add(guitarra);
+
+        Cancion c1 = new Cancion("Tema 1", 3.5);
+        c1.agregarRolRequerido(voz, 1);
+        c1.agregarRolRequerido(guitarra, 1);
+        canciones.add(c1);
+
+        ArrayList<Rol> rolesJuan = new ArrayList<>();
+        rolesJuan.add(voz);
+        ArrayList<Banda> bandas = new ArrayList<>();
+        ArtistaBase juan = new ArtistaBase("Juan", rolesJuan, bandas);
+        artistasBase.add(juan);
+    }
+
+    private static int leerEntero(String msg) {
+        System.out.print(msg);
+        while (!scanner.hasNextInt()) {
+            System.out.print("Ingresá un número válido: ");
+            scanner.next();
+        }
+        int n = scanner.nextInt();
+        scanner.nextLine();
+        return n;
+    }
+}
