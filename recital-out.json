@@ -1,0 +1,70 @@
+{
+  "artistas": [
+    {
+      "nombre": "Juan",
+      "roles": [
+        "Voz"
+      ],
+      "bandas": [
+        "BandaCompartida"
+      ],
+      "costo": 0.0,
+      "maxCanciones": 0,
+      "rolesEntrenados": [],
+      "tipo": "base"
+    },
+    {
+      "nombre": "Ana",
+      "roles": [
+        "Voz"
+      ],
+      "bandas": [
+        "BandaCompartida"
+      ],
+      "costo": 800.0,
+      "maxCanciones": 2,
+      "rolesEntrenados": [],
+      "tipo": "candidato"
+    },
+    {
+      "nombre": "Pablo",
+      "roles": [
+        "Guitarra"
+      ],
+      "bandas": [],
+      "costo": 1000.0,
+      "maxCanciones": 3,
+      "rolesEntrenados": [],
+      "tipo": "candidato"
+    }
+  ],
+  "canciones": [
+    {
+      "titulo": "Tema 1",
+      "duracion": 3.5,
+      "rolesRequeridos": {
+        "Voz": 1,
+        "Guitarra": 1
+      },
+      "asignaciones": [
+        {
+          "artista": "Ana",
+          "rol": "Voz",
+          "costo": 0.0,
+          "descuentos": 0.0,
+          "tipo": "candidato"
+        },
+        {
+          "artista": "Pablo",
+          "rol": "Guitarra",
+          "costo": 0.0,
+          "descuentos": 0.0,
+          "tipo": "candidato"
+        }
+      ]
+    }
+  ],
+  "totales": {
+    "costoRecital": 0.0
+  }
+}

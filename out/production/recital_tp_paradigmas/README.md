@@ -1,0 +1,1 @@
+# recital_tp_paradigmas
