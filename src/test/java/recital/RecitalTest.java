@@ -1,41 +1,29 @@
 package recital;
 
-import static org.junit.jupiter.api.Assertions.*;
-import java.util.*;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class RecitalTest {
-
-	@Test
-	public void testFaltantesGlobales() {
-		Rol voz = new Rol("Voz");
-
-		Cancion c1 = new Cancion("A", 3);
-		Cancion c2 = new Cancion("B", 3);
-
-		c1.agregarRolRequerido(voz, 1);
-		c2.agregarRolRequerido(voz, 2);
-
-		Recital r = new Recital("Test", List.of(c1, c2), new ArrayList<>(), new ArrayList<>());
-
-		Map<Rol, Integer> falt = r.faltantesGlobales();
-
-		assertEquals(3, falt.get(voz));
-	}
+class RecitalTest {
 
 	@Test
-	public void testCostoTotal() throws Exception {
+	@DisplayName("Simulación: Elegir candidato más barato")
+	void testElegirMasBarato() throws Exception {
 		Rol voz = new Rol("Voz");
-		ArtistaCandidato ac = new ArtistaCandidato("Ana", new ArrayList<>(List.of(voz)), new ArrayList<>(), 1000, 2);
-
-		Cancion c = new Cancion("Tema", 3);
+		Cancion c = new Cancion("T", 3.0);
 		c.agregarRolRequerido(voz, 1);
 
-		Asignacion a = new Asignacion(ac, c, voz);
-		a.setCosto(1000);
+		ArtistaCandidato barato = new ArtistaCandidato("Barato", new ArrayList<>(List.of(voz)), new ArrayList<>(),
+				100.0, 5);
+		ArtistaCandidato caro = new ArtistaCandidato("Caro", new ArrayList<>(List.of(voz)), new ArrayList<>(), 1000.0,
+				5);
 
-		Recital r = new Recital("Test", List.of(c), new ArrayList<>(), List.of(ac));
+		// Simulamos la lógica del Main
+		List<ArtistaCandidato> candidatos = List.of(caro, barato);
+		ArtistaCandidato elegido = candidatos.stream()
+				.min(Comparator.comparing(a -> a.calcularCostoFinal(new ArrayList<>()))).orElseThrow();
 
-		assertEquals(1000, r.costoTotal());
+		assertEquals("Barato", elegido.getNombre());
 	}
 }

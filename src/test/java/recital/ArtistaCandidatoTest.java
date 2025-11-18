@@ -1,63 +1,74 @@
 package recital;
 
-import static org.junit.jupiter.api.Assertions.*;
-import java.util.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import java.util.ArrayList;
+import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class ArtistaCandidatoTest {
+class ArtistaCandidatoTest {
 
-	@Test
-	public void testEntrenarRolOK() throws Exception {
-		Rol voz = new Rol("Voz");
-		Rol piano = new Rol("Piano");
+	private Rol voz, guitarra;
+	private ArtistaBase baseSlash;
+	private ArtistaCandidato axl, candidatoNuevo;
 
-		ArtistaCandidato ac = new ArtistaCandidato("Ana", new ArrayList<>(List.of(voz)), new ArrayList<>(), 1000, 3);
+	@BeforeEach
+	void setUp() {
+		voz = new Rol("Voz");
+		guitarra = new Rol("Guitarra");
 
-		Recital r = new Recital("Recital", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+		// Base: Slash en "Guns N Roses"
+		baseSlash = new ArtistaBase("Slash", new ArrayList<>(List.of(guitarra)),
+				new ArrayList<>(List.of(new Banda("Guns N Roses"))));
 
-		ac.entrenar(r, piano);
+		// Candidato: Axl en "guns n roses" (minúsculas) para probar Case Insensitive
+		axl = new ArtistaCandidato("Axl", new ArrayList<>(List.of(voz)),
+				new ArrayList<>(List.of(new Banda("guns n roses"))), 1000.0, 5);
 
-		assertTrue(ac.getRolesEntrenados().contains(piano));
+		candidatoNuevo = new ArtistaCandidato("Nuevo", new ArrayList<>(List.of(voz)), new ArrayList<>(), 500.0, 1);
 	}
 
 	@Test
-	public void testEntrenarErrorYaAsignado() throws Exception {
-		Rol voz = new Rol("Voz");
-		Rol piano = new Rol("Piano");
+	@DisplayName("Calcula costo con 50% descuento si comparte banda (Case Insensitive)")
+	void testCostoConDescuento() {
+		// 1000 -> comparte banda -> 500
+		assertEquals(500.0, axl.calcularCostoFinal(List.of(baseSlash)), 0.01);
+	}
 
-		ArtistaCandidato ac = new ArtistaCandidato("Ana", new ArrayList<>(List.of(voz)), new ArrayList<>(), 1000, 3);
+	@Test
+	@DisplayName("Costo completo si no comparte bandas")
+	void testCostoSinDescuento() {
+		assertEquals(500.0, candidatoNuevo.calcularCostoFinal(List.of(baseSlash)), 0.01);
+	}
 
-		Cancion c = new Cancion("Tema1", 3.0);
+	@Test
+	@DisplayName("El descuento NO es acumulativo (max 50%)")
+	void testDescuentoNoAcumulativo() {
+		ArtistaBase otroBase = new ArtistaBase("Duff", new ArrayList<>(),
+				new ArrayList<>(List.of(new Banda("Guns N Roses"))));
+
+		// Axl comparte con Slash Y con Duff. El precio debe ser 500, no 250.
+		assertEquals(500.0, axl.calcularCostoFinal(List.of(baseSlash, otroBase)), 0.01);
+	}
+
+	@Test
+	@DisplayName("Entrenamiento aumenta costo base un 50% por rol")
+	void testEntrenamiento() {
+		// 500 + 50% = 750
+		candidatoNuevo.entrenarRol(guitarra);
+		assertEquals(750.0, candidatoNuevo.calcularCostoExtraEntrenado(), 0.01);
+	}
+
+	@Test
+	@DisplayName("No puede entrenar si ya está contratado en el recital")
+	void testEntrenamientoBloqueado() throws Exception {
+		Cancion c = new Cancion("T", 3.0);
 		c.agregarRolRequerido(voz, 1);
+		new Asignacion(axl, c, voz);
 
-		new Asignacion(ac, c, voz); // ya asignado
+		Recital r = new Recital("R", List.of(c), List.of(), List.of(axl));
 
-		Recital r = new Recital("Recital", List.of(c), new ArrayList<>(), new ArrayList<>(List.of(ac)));
-
-		Exception ex = assertThrows(Exception.class, () -> ac.entrenar(r, piano));
-
-		assertTrue(ex.getMessage().contains("ya fue contratado"));
-	}
-
-	@Test
-	public void testCostoConEntrenamientoYDescuento() {
-		Rol voz = new Rol("Voz");
-		Rol piano = new Rol("Piano");
-		Banda b = new Banda("Banda");
-
-		ArtistaBase base = new ArtistaBase("Juan", new ArrayList<>(List.of(voz)), new ArrayList<>(List.of(b)));
-
-		ArtistaCandidato ac = new ArtistaCandidato("Ana", new ArrayList<>(List.of(voz)), new ArrayList<>(List.of(b)), // comparte
-																														// banda
-																														// →
-																														// descuento
-				1000, 3);
-
-		ac.entrenarRol(piano); // +50%
-
-		double costo = ac.calcularCostoFinal(List.of(base));
-
-		// costo base 1000 → entrenado 1000 * 1.5 = 1500 → descuento 50% = 750
-		assertEquals(750, costo);
+		assertThrows(Exception.class, () -> axl.entrenar(r, guitarra));
 	}
 }

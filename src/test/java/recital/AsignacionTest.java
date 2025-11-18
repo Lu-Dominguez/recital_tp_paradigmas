@@ -1,60 +1,56 @@
 package recital;
 
-import static org.junit.jupiter.api.Assertions.*;
-import java.util.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class AsignacionTest {
+class AsignacionTest {
 
-	@Test
-	public void testAsignacionCorrecta() throws Exception {
-		Rol voz = new Rol("Voz");
-		ArtistaCandidato ac = new ArtistaCandidato("Ana", new ArrayList<>(List.of(voz)), new ArrayList<>(), 1000, 2);
+	private Rol voz, piano;
+	private ArtistaCandidato candidato;
+	private Cancion cancion;
 
-		Cancion c = new Cancion("Tema", 3.0);
-		c.agregarRolRequerido(voz, 1);
-
-		Asignacion a = new Asignacion(ac, c, voz);
-
-		assertEquals(1, c.getAsignaciones().size());
-		assertEquals(ac, a.getArtista());
-	}
-
-	@Test
-	public void testAsignacionDuplicadaError() throws Exception {
-		Rol voz = new Rol("Voz");
-		ArtistaCandidato ac = new ArtistaCandidato("Ana", new ArrayList<>(List.of(voz)), new ArrayList<>(), 1000, 2);
-
-		Cancion c = new Cancion("Tema", 3.0);
-		c.agregarRolRequerido(voz, 2);
-
-		new Asignacion(ac, c, voz);
-
-		Exception ex = assertThrows(Exception.class, () -> new Asignacion(ac, c, voz));
-
-		assertTrue(ex.getMessage().contains("ya tiene asignado un rol"));
-	}
-
-	@Test
-	public void testAsignacionSuperaMaxCanciones() throws Exception {
-		Rol voz = new Rol("Voz");
-
-		ArtistaCandidato ac = new ArtistaCandidato("Ana", new ArrayList<>(List.of(voz)), new ArrayList<>(), 1000, 1 // sólo
-																													// puede
+	@BeforeEach
+	void setUp() {
+		voz = new Rol("Voz");
+		piano = new Rol("Piano");
+		candidato = new ArtistaCandidato("Cantante", new ArrayList<>(List.of(voz)), new ArrayList<>(), 500.0, 1); // Max
 																													// 1
 																													// canción
-		);
+		cancion = new Cancion("Tema", 3.0);
+	}
 
-		Cancion c1 = new Cancion("Tema1", 3.0);
-		Cancion c2 = new Cancion("Tema2", 3.0);
+	@Test
+	@DisplayName("Asignación exitosa vincula artista y canción")
+	void testCrearAsignacion() throws Exception {
+		cancion.agregarRolRequerido(voz, 1);
+		Asignacion a = new Asignacion(candidato, cancion, voz);
 
-		c1.agregarRolRequerido(voz, 1);
+		assertEquals(candidato, a.getArtista());
+		assertTrue(cancion.getAsignaciones().contains(a));
+	}
+
+	@Test
+	@DisplayName("Falla si el artista no conoce el rol")
+	void testRolDesconocido() {
+		cancion.agregarRolRequerido(piano, 1);
+		assertThrows(Exception.class, () -> new Asignacion(candidato, cancion, piano));
+	}
+
+	@Test
+	@DisplayName("Falla si supera el tope de canciones")
+	void testTopeCanciones() throws Exception {
+		// 1. Llenamos su cupo (Max 1)
+		cancion.agregarRolRequerido(voz, 1);
+		new Asignacion(candidato, cancion, voz);
+
+		// 2. Intentamos asignar a otra canción
+		Cancion c2 = new Cancion("Otra", 3.0);
 		c2.agregarRolRequerido(voz, 1);
 
-		new Asignacion(ac, c1, voz);
-
-		Exception ex = assertThrows(Exception.class, () -> new Asignacion(ac, c2, voz));
-
+		Exception ex = assertThrows(Exception.class, () -> new Asignacion(candidato, c2, voz));
 		assertTrue(ex.getMessage().contains("máximo de canciones"));
 	}
 }

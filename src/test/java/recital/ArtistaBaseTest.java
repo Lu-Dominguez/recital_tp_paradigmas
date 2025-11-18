@@ -1,34 +1,71 @@
 package recital;
 
-import static org.junit.jupiter.api.Assertions.*;
-import java.util.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import java.util.ArrayList;
+import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class ArtistaBaseTest {
+class ArtistaBaseTest {
 
-	@Test
-	public void testValidarAsignacionOK() throws Exception {
-		Rol voz = new Rol("Voz");
-		ArtistaBase base = new ArtistaBase("Juan", new ArrayList<>(List.of(voz)), new ArrayList<>());
+	private Rol guitarra;
+	private Banda banda;
+	private ArtistaBase artista;
 
-		Cancion c = new Cancion("Tema", 3.0);
-		c.agregarRolRequerido(voz, 1);
+	@BeforeEach
+	void setUp() {
+		guitarra = new Rol("Guitarra");
+		banda = new Banda("BandaTest");
 
-		assertDoesNotThrow(() -> base.validarAsignacion(c, voz));
+		// Constructor con listas mutables
+		artista = new ArtistaBase("Juan", new ArrayList<>(List.of(guitarra)), new ArrayList<>(List.of(banda)));
 	}
 
 	@Test
-	public void testValidarAsignacionErrorRolNoHistorico() {
-		Rol voz = new Rol("Voz");
-		Rol guit = new Rol("Guitarra");
+	@DisplayName("Constructor: Lanza excepción si recibe listas nulas")
+	void testConstructorNullSafety() {
+		assertThrows(IllegalArgumentException.class, () -> new ArtistaBase("Error", null, new ArrayList<>()));
 
-		ArtistaBase base = new ArtistaBase("Juan", new ArrayList<>(List.of(voz)), new ArrayList<>());
+		assertThrows(IllegalArgumentException.class, () -> new ArtistaBase("Error", new ArrayList<>(), null));
+	}
 
+	@Test
+	@DisplayName("Validar Asignación: Éxito si tiene el rol histórico")
+	void testValidarAsignacionOk() {
+		Cancion c = new Cancion("Tema", 3.0); // Dummy
+		assertDoesNotThrow(() -> artista.validarAsignacion(c, guitarra));
+	}
+
+	@Test
+	@DisplayName("Validar Asignación: Falla si NO tiene el rol histórico")
+	void testValidarAsignacionError() {
 		Cancion c = new Cancion("Tema", 3.0);
-		c.agregarRolRequerido(guit, 1);
+		Rol bateria = new Rol("Batería");
 
-		Exception ex = assertThrows(Exception.class, () -> base.validarAsignacion(c, guit));
+		Exception ex = assertThrows(Exception.class, () -> artista.validarAsignacion(c, bateria));
+		assertTrue(ex.getMessage().contains("no ha ocupado el rol"));
+	}
 
-		assertTrue(ex.getMessage().contains("no ha ocupado"));
+	@Test
+	@DisplayName("Agregar Rol: Actualiza la lista de conocimientos")
+	void testAgregarRol() throws Exception {
+		Rol nuevo = new Rol("Teclado");
+		artista.agregarRol(nuevo);
+
+		assertTrue(artista.getRolesHistoricos().contains(nuevo));
+
+		// Ahora debería pasar la validación
+		Cancion c = new Cancion("Tema", 3.0);
+		assertDoesNotThrow(() -> artista.validarAsignacion(c, nuevo));
+	}
+
+	@Test
+	@DisplayName("Agregar Banda: Actualiza el historial")
+	void testAgregarBanda() {
+		Banda nueva = new Banda("NuevaBanda");
+		artista.agregarBanda(nueva);
+
+		assertTrue(artista.getBandasHistoricas().contains(nueva));
 	}
 }

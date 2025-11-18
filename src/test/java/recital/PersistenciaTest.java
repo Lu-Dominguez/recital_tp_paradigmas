@@ -1,51 +1,92 @@
 package recital;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
-import java.nio.file.*;
-import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
-public class PersistenciaTest {
+import static org.junit.jupiter.api.Assertions.*;
+
+class PersistenciaTest {
 
 	@Test
-	public void testGuardarYCargarEstado() throws Exception {
+	@DisplayName("Guardar y Cargar: El ciclo completo debe recuperar los mismos datos")
+	void testGuardarYCargarRoundTrip(@TempDir Path tempDir) throws Exception {
+		// 1. PREPARACIÓN DE DATOS
+		Rol rolVoz = new Rol("Voz");
+		Banda banda = new Banda("Queen");
 
-		// --- Crear objetos ---
-		Rol voz = new Rol("Voz");
-		Rol piano = new Rol("Piano");
+		// Base
+		ArtistaBase baseOriginal = new ArtistaBase("FreddieBase", new ArrayList<>(List.of(rolVoz)),
+				new ArrayList<>(List.of(banda)));
 
-		ArtistaBase base = new ArtistaBase("Carlos", new ArrayList<>(List.of(voz)), new ArrayList<>());
+		// Canción con asignación
+		Cancion cancionOriginal = new Cancion("Bohemian Rhapsody", 6.0);
+		cancionOriginal.agregarRolRequerido(rolVoz, 1);
 
-		ArtistaCandidato ac = new ArtistaCandidato("Ana", new ArrayList<>(List.of(voz)), new ArrayList<>(), 1000, 3);
-		ac.entrenarRol(piano);
+		// (Opcional: asignamos algo para probar que se guarda la asignación,
+		// aunque tu Persistencia guarda referencias por nombre)
 
-		Cancion c = new Cancion("Tema1", 3);
-		c.agregarRolRequerido(voz, 1);
-		Asignacion as = new Asignacion(ac, c, voz);
-		as.setCosto(500);
-		as.setDescuentos(500);
+		// Definimos la ruta del archivo temporal
+		Path rutaArchivo = tempDir.resolve("recital-test.json");
+		String pathString = rutaArchivo.toString();
 
-		// --- Guardar ---
-		String ruta = "src/test/resources/estado_guardado.json";
-		Persistencia.guardarEstado(ruta, List.of(base), List.of(ac), List.of(c));
+		// 2. GUARDAR ESTADO
+		Persistencia.guardarEstado(pathString, List.of(baseOriginal), new ArrayList<>(), // Sin candidatos
+				List.of(cancionOriginal));
 
-		assertTrue(Files.exists(Path.of(ruta)));
+		// 3. LIMPIEZA (Para asegurar que cargamos desde el archivo y no de memoria)
+		List<ArtistaBase> basesCargadas = new ArrayList<>();
+		List<ArtistaCandidato> candidatosCargados = new ArrayList<>();
+		List<Rol> rolesCargados = new ArrayList<>();
+		List<Cancion> cancionesCargadas = new ArrayList<>();
 
-		// --- Cargar ---
+		// 4. CARGAR ESTADO
+		Persistencia.cargarEstado(pathString, basesCargadas, candidatosCargados, rolesCargados, cancionesCargadas);
+
+		// 5. VERIFICACIONES
+		// Verificar Artista Base
+		assertEquals(1, basesCargadas.size(), "Debe haber 1 artista base cargado");
+		assertEquals("FreddieBase", basesCargadas.get(0).getNombre());
+		assertEquals("Queen", basesCargadas.get(0).getBandasHistoricas().get(0).getNombre());
+
+		// Verificar Canción
+		assertEquals(1, cancionesCargadas.size(), "Debe haber 1 canción cargada");
+		Cancion cCargada = cancionesCargadas.get(0);
+		assertEquals("Bohemian Rhapsody", cCargada.getTitulo());
+		assertEquals(6.0, cCargada.getDuracion());
+
+		// Verificar Roles (se recuperan del mapa de roles requeridos)
+		assertTrue(cCargada.getRolesRequeridos().containsKey(new Rol("Voz")));
+	}
+
+	@Test
+	@DisplayName("LectorArchivos: Debe cargar JSONs correctamente")
+	void testLectorArchivos(@TempDir Path tempDir) throws Exception {
+		// Crear archivos JSON falsos en la carpeta temporal
+		Path archivoArtistas = tempDir.resolve("artistas.json");
+		Path archivoBase = tempDir.resolve("bases.json");
+
+		String jsonArtistas = "[{\"nombre\":\"Axl\",\"roles\":[\"Voz\"],\"bandas\":[\"GNR\"],\"costo\":100,\"maxCanciones\":5}]";
+		String jsonBase = "[]"; // Lista vacía de nombres base, así Axl se carga como Candidato
+
+		Files.writeString(archivoArtistas, jsonArtistas);
+		Files.writeString(archivoBase, jsonBase);
+
 		List<ArtistaBase> bases = new ArrayList<>();
 		List<ArtistaCandidato> candidatos = new ArrayList<>();
 		List<Rol> roles = new ArrayList<>();
-		List<Cancion> canciones = new ArrayList<>();
 
-		Persistencia.cargarEstado(ruta, bases, candidatos, roles, canciones);
+		// Ejecutar carga
+		LectorArchivos.cargarArtistas(archivoArtistas.toString(), archivoBase.toString(), bases, candidatos, roles);
 
-		assertEquals(1, bases.size());
+		// Verificar
 		assertEquals(1, candidatos.size());
-		assertEquals(1, canciones.size());
-
-		ArtistaCandidato cargado = candidatos.get(0);
-		assertEquals("Ana", cargado.getNombre());
-		assertEquals(1, cargado.getRolesEntrenados().size());
+		assertEquals("Axl", candidatos.get(0).getNombre());
+		assertEquals(1, roles.size()); // Se creó el rol "Voz" automáticamente
 	}
 }

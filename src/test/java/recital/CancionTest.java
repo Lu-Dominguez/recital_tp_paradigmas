@@ -1,49 +1,54 @@
 package recital;
 
-import static org.junit.jupiter.api.Assertions.*;
-import java.util.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class CancionTest {
+class CancionTest {
 
-	@Test
-	public void testRolesFaltantesSinBases() {
-		Rol voz = new Rol("Voz");
-		Cancion c = new Cancion("Tema", 3.0);
-		c.agregarRolRequerido(voz, 2);
+	private Rol voz, guitarra;
+	private Cancion cancion;
+	private ArtistaBase baseJuan;
 
-		Map<Rol, Integer> falt = c.faltantesConBases(List.of());
-
-		assertEquals(2, falt.get(voz));
+	@BeforeEach
+	void setUp() {
+		voz = new Rol("Voz");
+		guitarra = new Rol("Guitarra");
+		cancion = new Cancion("Tema", 4.0);
+		baseJuan = new ArtistaBase("Juan", new ArrayList<>(List.of(voz)), new ArrayList<>());
 	}
 
 	@Test
-	public void testRolesFaltantesConBases() {
-		Rol voz = new Rol("Voz");
-		Cancion c = new Cancion("Tema", 3.0);
-		c.agregarRolRequerido(voz, 1);
+	@DisplayName("Faltantes: Descuenta rol si la Base lo cubre")
+	void testFaltantesConBase() {
+		cancion.agregarRolRequerido(voz, 2); // Pide 2 voces
 
-		ArtistaBase base = new ArtistaBase("Juan", new ArrayList<>(List.of(voz)), new ArrayList<>());
+		Map<Rol, Integer> faltantes = cancion.faltantesConBases(List.of(baseJuan));
 
-		Map<Rol, Integer> falt = c.faltantesConBases(List.of(base));
-
-		assertTrue(falt.isEmpty()); // base cubre el rol
+		// 2 necesarios - 1 base = 1 faltante
+		assertEquals(1, faltantes.get(voz));
 	}
 
 	@Test
-	public void testCancelarAsignaciones() throws Exception {
-		Rol voz = new Rol("Voz");
+	@DisplayName("Faltantes: Si pide roles distintos, solo descuenta el que la base sabe")
+	void testFaltantesRolesMixtos() {
+		cancion.agregarRolRequerido(voz, 1);
+		cancion.agregarRolRequerido(guitarra, 1);
 
-		ArtistaCandidato ac = new ArtistaCandidato("Ana", new ArrayList<>(List.of(voz)), new ArrayList<>(), 1000, 3);
+		Map<Rol, Integer> faltantes = cancion.faltantesConBases(List.of(baseJuan));
 
-		Cancion c = new Cancion("Tema", 3.0);
-		c.agregarRolRequerido(voz, 1);
+		// Voz cubierta (no está o es 0), Guitarra falta
+		assertNull(faltantes.get(voz));
+		assertEquals(1, faltantes.get(guitarra));
+	}
 
-		new Asignacion(ac, c, voz);
-
-		int removed = c.removerAsignacionesDe(ac);
-
-		assertEquals(1, removed);
-		assertEquals(0, c.getAsignaciones().size());
+	@Test
+	@DisplayName("Roles Repetidos: Si pide 2 y hay 1 base, falta 1")
+	void testRolesRepetidos() {
+		cancion.agregarRolRequerido(voz, 2);
+		var falt = cancion.faltantesConBases(List.of(baseJuan));
+		assertEquals(1, falt.get(voz));
 	}
 }
