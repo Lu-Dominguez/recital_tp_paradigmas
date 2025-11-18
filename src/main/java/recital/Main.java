@@ -200,17 +200,17 @@ public class Main {
     }
 
     private static void cargarDatosDesdeArchivos() {
-        System.out.println("Ruta de artistas.json [por defecto: artistas.json]:");
+        System.out.println("Ruta de artistas.json [por defecto: /src/main/resources/artistas.json]:");
         String rutaArtistas = scanner.nextLine().trim();
-        if (rutaArtistas.isEmpty()) rutaArtistas = "artistas.json";
+        if (rutaArtistas.isEmpty()) rutaArtistas = "./src/main/resources/artistas.json";
 
-        System.out.println("Ruta de artistas-discografica.json [por defecto: artistas-discografica.json]:");
+        System.out.println("Ruta de artistas-discografica.json [por defecto: /src/main/resources/artistas-discografica.json]:");
         String rutaBase = scanner.nextLine().trim();
-        if (rutaBase.isEmpty()) rutaBase = "artistas-discografica.json";
+        if (rutaBase.isEmpty()) rutaBase = "./src/main/resources/artistas-discografica.json";
 
-        System.out.println("Ruta de recital.json [por defecto: recital.json]:");
+        System.out.println("Ruta de recital.json [por defecto: /src/main/resources/recital.json]:");
         String rutaRecital = scanner.nextLine().trim();
-        if (rutaRecital.isEmpty()) rutaRecital = "recital.json";
+        if (rutaRecital.isEmpty()) rutaRecital = "./src/main/resources/recital.json";
 
         try {
             canciones.clear();

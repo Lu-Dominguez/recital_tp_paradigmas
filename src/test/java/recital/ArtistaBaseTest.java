@@ -33,7 +33,7 @@ class ArtistaBaseTest {
 	@Test
 	@DisplayName("Validar Asignación: Éxito si tiene el rol histórico")
 	void testValidarAsignacionOk() {
-		Cancion c = new Cancion("Tema", 3.0); // Dummy
+		Cancion c = new Cancion("Tema", 3.0); 
 		assertDoesNotThrow(() -> artista.validarAsignacion(c, guitarra));
 	}
 
