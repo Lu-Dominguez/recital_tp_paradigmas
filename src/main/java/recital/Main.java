@@ -562,7 +562,7 @@ public class Main {
     private static void guardarEstadoInteractivo() {
         System.out.println("Ruta de salida [por defecto: recital-out.json]:");
         String ruta = scanner.nextLine().trim();
-        if (ruta.isEmpty()) ruta = "recital-out.json";
+        if (ruta.isEmpty()) ruta = "./src/main/resources/recital-out.json";
         try {
             Persistencia.guardarEstado(ruta, artistasBase, candidatos, canciones);
             System.out.println("Estado guardado en '" + ruta + "'.");
