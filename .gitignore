@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *.class
 target/
 out/
@@ -13,4 +14,49 @@ bin/
 Thumbs.db
 *~
 *.tmp
+=======
+### MAVEN ###
+/target/
+/out/
+/build/
+/*.log
+
+### IntelliJ IDEA ###
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+### Eclipse ###
+.project
+.classpath
+.settings/
+bin/
+tmp/
+
+### Java ###
+*.class
+*.jar
+*.war
+*.ear
+
+### OS files ###
+.DS_Store
+Thumbs.db
+
+### Logs & temp ###
+*.log
+*.tmp
+*.swp
+*~
+
+### JSON generados por pruebas ###
+recital-out.json
+test-out.json
+
+### VSCode ###
+.vscode/
+
+>>>>>>> bbc8fb4 (Estructura final del proyecto)
 
