@@ -1,12 +1,13 @@
 {
   "artistas": [
     {
-      "nombre": "Juan",
+      "nombre": "Brian May",
       "roles": [
-        "Voz"
+        "guitarra eléctrica",
+        "voz secundaria"
       ],
       "bandas": [
-        "BandaCompartida"
+        "Queen"
       ],
       "costo": 0.0,
       "maxCanciones": 0,
@@ -14,57 +15,190 @@
       "tipo": "base"
     },
     {
-      "nombre": "Ana",
+      "nombre": "Roger Taylor",
       "roles": [
-        "Voz"
+        "batería",
+        "voz secundaria"
       ],
       "bandas": [
-        "BandaCompartida"
+        "Queen"
       ],
-      "costo": 800.0,
+      "costo": 0.0,
+      "maxCanciones": 0,
+      "rolesEntrenados": [],
+      "tipo": "base"
+    },
+    {
+      "nombre": "John Deacon",
+      "roles": [
+        "bajo"
+      ],
+      "bandas": [
+        "Queen"
+      ],
+      "costo": 0.0,
+      "maxCanciones": 0,
+      "rolesEntrenados": [],
+      "tipo": "base"
+    },
+    {
+      "nombre": "George Michael",
+      "roles": [
+        "voz principal"
+      ],
+      "bandas": [
+        "Wham!",
+        "George Michael"
+      ],
+      "costo": 1000.0,
+      "maxCanciones": 3,
+      "rolesEntrenados": [],
+      "tipo": "candidato"
+    },
+    {
+      "nombre": "Elton John",
+      "roles": [
+        "voz principal",
+        "piano"
+      ],
+      "bandas": [
+        "Elton John Band"
+      ],
+      "costo": 1200.0,
       "maxCanciones": 2,
       "rolesEntrenados": [],
       "tipo": "candidato"
     },
     {
-      "nombre": "Pablo",
+      "nombre": "David Bowie",
       "roles": [
-        "Guitarra"
+        "voz principal"
       ],
-      "bandas": [],
-      "costo": 1000.0,
-      "maxCanciones": 3,
+      "bandas": [
+        "Tin Machine",
+        "David Bowie"
+      ],
+      "costo": 1500.0,
+      "maxCanciones": 2,
+      "rolesEntrenados": [],
+      "tipo": "candidato"
+    },
+    {
+      "nombre": "Annie Lennox",
+      "roles": [
+        "voz principal"
+      ],
+      "bandas": [
+        "Eurythmics"
+      ],
+      "costo": 900.0,
+      "maxCanciones": 2,
+      "rolesEntrenados": [],
+      "tipo": "candidato"
+    },
+    {
+      "nombre": "Lisa Stansfield",
+      "roles": [
+        "voz principal"
+      ],
+      "bandas": [
+        "Lisa Stansfield",
+        "Queen"
+      ],
+      "costo": 800.0,
+      "maxCanciones": 2,
       "rolesEntrenados": [],
       "tipo": "candidato"
     }
   ],
   "canciones": [
     {
-      "titulo": "Tema 1",
-      "duracion": 3.5,
+      "titulo": "Somebody to Love",
+      "duracion": 0.0,
       "rolesRequeridos": {
-        "Voz": 1,
-        "Guitarra": 1
+        "piano": 1,
+        "voz principal": 1,
+        "bajo": 1,
+        "guitarra eléctrica": 1,
+        "batería": 1
       },
       "asignaciones": [
         {
-          "artista": "Ana",
-          "rol": "Voz",
-          "costo": 0.0,
-          "descuentos": 0.0,
-          "tipo": "candidato"
+          "artista": "Elton John",
+          "rol": "piano",
+          "costo": 1200.0,
+          "descuentos": 0.0
         },
         {
-          "artista": "Pablo",
-          "rol": "Guitarra",
-          "costo": 0.0,
-          "descuentos": 0.0,
-          "tipo": "candidato"
+          "artista": "Lisa Stansfield",
+          "rol": "voz principal",
+          "costo": 400.0,
+          "descuentos": 400.0
+        }
+      ]
+    },
+    {
+      "titulo": "We Will Rock You",
+      "duracion": 0.0,
+      "rolesRequeridos": {
+        "voz principal": 1,
+        "bajo": 1,
+        "guitarra eléctrica": 1,
+        "batería": 1
+      },
+      "asignaciones": [
+        {
+          "artista": "Lisa Stansfield",
+          "rol": "voz principal",
+          "costo": 400.0,
+          "descuentos": 400.0
+        }
+      ]
+    },
+    {
+      "titulo": "These Are the Days of Our Lives",
+      "duracion": 0.0,
+      "rolesRequeridos": {
+        "voz principal": 1,
+        "bajo": 1,
+        "guitarra eléctrica": 1,
+        "batería": 1
+      },
+      "asignaciones": [
+        {
+          "artista": "Annie Lennox",
+          "rol": "voz principal",
+          "costo": 900.0,
+          "descuentos": 0.0
+        }
+      ]
+    },
+    {
+      "titulo": "Under Pressure",
+      "duracion": 0.0,
+      "rolesRequeridos": {
+        "voz principal": 2,
+        "bajo": 1,
+        "guitarra eléctrica": 1,
+        "batería": 1
+      },
+      "asignaciones": [
+        {
+          "artista": "Annie Lennox",
+          "rol": "voz principal",
+          "costo": 900.0,
+          "descuentos": 0.0
+        },
+        {
+          "artista": "George Michael",
+          "rol": "voz principal",
+          "costo": 1000.0,
+          "descuentos": 0.0
         }
       ]
     }
   ],
   "totales": {
-    "costoRecital": 0.0
+    "costoRecital": 4800.0
   }
 }

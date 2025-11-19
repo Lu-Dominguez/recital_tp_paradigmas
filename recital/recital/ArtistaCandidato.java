@@ -23,16 +23,16 @@ public class ArtistaCandidato extends ArtistaBase {
 
     @Override
     public void validarAsignacion(recital.Cancion cancion, recital.Rol rol) throws Exception {
-        if (!puedeTocar()) throw new Exception("El artista ha alcanzado el máximo de canciones dispuesto a tocar.");
-        if (!getRolesHistoricos().contains(rol) && !getRolesEntrenados().contains(rol)) {
+        if(!puedeTocar()) throw new Exception("El artista ha alcanzado el máximo de canciones dispuesto a tocar.");
+        if(!getRolesHistoricos().contains(rol) && !getRolesEntrenados().contains(rol)) {
             throw new Exception("El artista nunca ha ocupado ese rol. Debe entrenarse.");
         }
     }
 
     public boolean compartioBandaConArtistaBase(ArrayList<ArtistaBase> artistasBase) {
-        for (ArtistaBase a : artistasBase) {
-            for (Banda b : this.getBandasHistoricas()) {
-                if (a.getBandasHistoricas().contains(b)) return true;
+        for(ArtistaBase a : artistasBase) {
+            for(Banda b : this.getBandasHistoricas()) {
+                if(a.getBandasHistoricas().contains(b)) return true;
             }
         }
         return false;

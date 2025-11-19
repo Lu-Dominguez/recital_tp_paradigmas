@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+
 public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
@@ -13,6 +14,7 @@ public class Main {
     private static final List<ArtistaBase> artistasBase = new ArrayList<>();
     private static final List<ArtistaCandidato> candidatos = new ArrayList<>();
     private static final List<Rol> roles = new ArrayList<>();
+    private static boolean prologConectado = false;
 
     public static void main(String[] args) throws Exception {
 
@@ -20,6 +22,10 @@ public class Main {
 
         int opcion;
         do {
+        	if(!prologConectado) {
+                UtilidadesProlog.probarConexion(); 
+                prologConectado = true;
+            }
             mostrarMenu();
             opcion = leerEntero("Opcion: ");
 
@@ -38,6 +44,7 @@ public class Main {
                 case 12 -> verCostoTotalRecital();
                 case 13 -> guardarEstadoInteractivo();
                 case 14 -> cargarEstadoInteractivo();
+                case 15 -> consultarEntrenamientosMinimos();
                 case 0 -> salir();
                 default -> System.out.println("Opcion invalida");
             }
@@ -61,6 +68,7 @@ public class Main {
         System.out.println("12 - Ver costo total del recital");
         System.out.println("13 - Guardar estado (recital-out.json)");
         System.out.println("14 - Cargar estado previo");
+        System.out.println("15 - [PROLOG] Ver ENTRENAMIENTOS MINIMOS requeridos");
         System.out.println("0 - Salir");
     }
 
@@ -156,12 +164,14 @@ public class Main {
     private static void cargarEscenarioDeEjemplo() {
         Rol voz = new Rol("Voz");
         Rol guitarra = new Rol("Guitarra");
+        Rol bateria = new Rol("bateria");
         roles.add(voz);
         roles.add(guitarra);
 
         Cancion c1 = new Cancion("Tema 1", 3.5);
         c1.agregarRolRequerido(voz, 1);
         c1.agregarRolRequerido(guitarra, 1);
+        c1.agregarRolRequerido(bateria, 1);
         canciones.add(c1);
 
         ArrayList<Rol> rolesJuan = new ArrayList<>();
@@ -186,6 +196,11 @@ public class Main {
         ArrayList<Banda> bandasPablo = new ArrayList<>();
         ArtistaCandidato pablo = new ArtistaCandidato("Pablo", rolesPablo, bandasPablo, 1000.0, 3);
         candidatos.add(pablo);
+        
+        ArrayList<Rol> rolesMaria = new ArrayList<>();
+        //Maria no sabe Batería ni Voz ni Guitarra -> puede entrenarse
+        ArtistaCandidato maria = new ArtistaCandidato("Maria", rolesMaria, new ArrayList<>(), 1200.0, 2);
+        candidatos.add(maria);
     }
 
     private static int leerEntero(String msg) {
@@ -273,7 +288,7 @@ public class Main {
         }
 
         int asignadas = 0;
-        for (var entry : faltantes.entrySet()) {
+        for(var entry : faltantes.entrySet()) {
             Rol rol = entry.getKey();
             int cantidad = entry.getValue();
             for (int i = 0; i < cantidad; i++) {
@@ -385,12 +400,12 @@ public class Main {
     }
 
     private static void entrenarArtista() {
-        if (candidatos.isEmpty()) {
+        if(candidatos.isEmpty()) {
             System.out.println("No hay artistas candidatos cargados.");
             return;
         }
         System.out.println("Elegir artista candidato a entrenar:");
-        for (int i = 0; i < candidatos.size(); i++) {
+        for(int i = 0; i < candidatos.size(); i++) {
             ArtistaCandidato a = candidatos.get(i);
             System.out.print(i + " - " + a.getNombre() + " | roles: ");
             a.getRolesHistoricos().forEach(r -> System.out.print(r.getNombreRol() + ", "));
@@ -401,7 +416,7 @@ public class Main {
             System.out.println();
         }
         int idx = leerEntero("Numero de artista: ");
-        if (idx < 0 || idx >= candidatos.size()) {
+        if(idx < 0 || idx >= candidatos.size()) {
             System.out.println("Artista invalido.");
             return;
         }
@@ -581,6 +596,11 @@ public class Main {
         } catch (Exception e) {
             System.out.println("No se pudo cargar el estado desde '" + ruta + "': " + e.getMessage());
         }
+    }
+    private static void consultarEntrenamientosMinimos() {
+    	UtilidadesProlog.obtenerEntrenamientosMinimos(crearRecitalActual());
+
+
     }
 
     private static void salir() {
