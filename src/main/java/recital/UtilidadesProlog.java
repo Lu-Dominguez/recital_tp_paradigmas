@@ -2,6 +2,8 @@ package recital;
 
 import org.jpl7.Query;
 import org.jpl7.Term;
+
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Locale;
@@ -10,9 +12,13 @@ public class UtilidadesProlog {
 
     public static void probarConexion() {
         try {
-            String rutaProlog = "C:/Users/Diego/Desktop/LOS DOMINGUEZ/Luana Unlam/Paradigmas/recital_tp_paradigmas-federico-dev/recital_tp_paradigmas-federico-dev/src/prolog/recital.pl";
+        	String rutaProlog = Paths.get("src", "main", "prolog", "recital.pl")
+        		    .toAbsolutePath()
+        		    .toString()
+        		    .replace("\\", "/");
 
-            String queryConsult = "consult('" + rutaProlog + "')";
+        	String queryConsult = "consult('" + rutaProlog + "')";
+
             Query qConsult = new Query(queryConsult);
 
             if (qConsult.hasSolution()) {
