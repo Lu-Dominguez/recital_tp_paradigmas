@@ -1,0 +1,48 @@
+{
+  "artistas": [
+    {
+      "nombre": "Carlos",
+      "roles": [
+        "Voz"
+      ],
+      "bandas": [],
+      "costo": 0.0,
+      "maxCanciones": 0,
+      "rolesEntrenados": [],
+      "tipo": "base"
+    },
+    {
+      "nombre": "Ana",
+      "roles": [
+        "Voz"
+      ],
+      "bandas": [],
+      "costo": 1000.0,
+      "maxCanciones": 3,
+      "rolesEntrenados": [
+        "Piano"
+      ],
+      "tipo": "candidato"
+    }
+  ],
+  "canciones": [
+    {
+      "titulo": "Tema1",
+      "duracion": 3.0,
+      "rolesRequeridos": {
+        "Voz": 1
+      },
+      "asignaciones": [
+        {
+          "artista": "Ana",
+          "rol": "Voz",
+          "costo": 500.0,
+          "descuentos": 500.0
+        }
+      ]
+    }
+  ],
+  "totales": {
+    "costoRecital": 500.0
+  }
+}
